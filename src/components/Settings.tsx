@@ -182,7 +182,7 @@ export default function Settings({
           </div>
           
           <div className="pt-6 border-t border-app-border flex justify-between items-center">
-            <span className="text-[10px] font-black text-app-muted uppercase tracking-[0.2em]">Fragrance Planner For Agent v1.4.4</span>
+            <span className="text-[10px] font-black text-app-muted uppercase tracking-[0.2em]">Fragrance Planner For Agent v1.2</span>
             <button
               onClick={handleSave}
               className="flex items-center gap-2 px-6 py-2 bg-app-accent text-white rounded-xl hover:bg-app-accent-hover transition-all font-bold shadow-sm"
