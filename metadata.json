@@ -1,5 +1,6 @@
 {
   "name": "Fragrance Planner For Agent",
+  "version": "1.2.1",
   "description": "An interactive system for fragrance formulation, blending, batching, and maceration tracking with advanced agent controls.",
   "requestFramePermissions": []
 }

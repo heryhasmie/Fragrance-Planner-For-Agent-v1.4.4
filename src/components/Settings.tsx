@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { AppSettings, ShopItem, InventoryItem } from '../types';
-import { Settings as SettingsIcon, Shield, RefreshCw, Upload, Save, UserCheck, CheckCircle2 } from 'lucide-react';
+import { Settings as SettingsIcon, Shield, RefreshCw, Upload, Save, UserCheck, CheckCircle2, DollarSign } from 'lucide-react';
 
 interface SettingsProps {
   settings: AppSettings;
@@ -103,13 +103,78 @@ export default function Settings({
   };
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6 max-w-4xl mx-auto pb-12">
       <div>
         <h1 className="text-3xl font-black text-app-text tracking-tight flex items-center gap-3">
-          <SettingsIcon size={32} className="text-app-accent" />
+          <SettingsIcon size={32} className="text-red-500" />
           Settings
         </h1>
-        <p className="text-app-muted font-medium mt-1">Configure Agent Identity and sync with the master app.</p>
+        <p className="text-app-muted font-medium mt-1">Configure global application settings and preferences.</p>
+      </div>
+
+      <div className="bg-app-card rounded-2xl border border-app-border overflow-hidden">
+        <div className="px-6 py-4 border-b border-app-border bg-app-bg/50 flex items-center gap-2">
+          <DollarSign size={20} className="text-emerald-500" />
+          <h2 className="text-lg font-bold text-app-text">
+            Currency & Conversion
+          </h2>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-xs font-black uppercase text-app-muted tracking-widest mb-1.5">Global Currency Symbol</label>
+              <input
+                type="text"
+                value={localSettings.currencySymbol}
+                onChange={e => setLocalSettings({...localSettings, currencySymbol: e.target.value})}
+                className="w-full px-4 py-3 bg-app-bg text-app-text border border-app-border rounded-xl focus:border-app-accent outline-none font-medium shadow-sm transition-colors"
+                placeholder="e.g. RM, $"
+              />
+              <p className="text-xs text-app-muted mt-2">This symbol will be displayed across the app (Budgets, Sell Tracker, etc.)</p>
+            </div>
+            
+            <div>
+              <label className="block text-xs font-black uppercase text-app-muted tracking-widest mb-1.5">Base Currency Name</label>
+              <input
+                type="text"
+                value={localSettings.baseCurrency}
+                onChange={e => setLocalSettings({...localSettings, baseCurrency: e.target.value})}
+                className="w-full px-4 py-3 bg-app-bg text-app-text border border-app-border rounded-xl focus:border-app-accent outline-none font-medium shadow-sm transition-colors"
+                placeholder="e.g. USD, EUR"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-black uppercase text-app-muted tracking-widest mb-1.5">Target Currency Name</label>
+              <input
+                type="text"
+                value={localSettings.targetCurrency}
+                onChange={e => setLocalSettings({...localSettings, targetCurrency: e.target.value})}
+                className="w-full px-4 py-3 bg-app-bg text-app-text border border-app-border rounded-xl focus:border-app-accent outline-none font-medium shadow-sm transition-colors"
+                placeholder="e.g. RM, GBP"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between items-baseline mb-1.5">
+                <label className="block text-xs font-black uppercase text-app-muted tracking-widest">Conversion Multiplier</label>
+                <div className="text-sm font-black text-app-text">
+                  1 {localSettings.baseCurrency || 'USD'} = {localSettings.currencyMultiplier || 1} {localSettings.targetCurrency || 'RM'}
+                </div>
+              </div>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={localSettings.currencyMultiplier}
+                onChange={e => setLocalSettings({...localSettings, currencyMultiplier: parseFloat(e.target.value) || 0})}
+                className="w-full px-4 py-3 bg-app-bg text-app-text border border-app-border rounded-xl focus:border-app-accent outline-none font-medium shadow-sm transition-colors"
+                placeholder="e.g. 3.95"
+              />
+              <p className="text-xs text-app-muted mt-2">This multiplier can be used in your calculations. Note: Currently this doesn't auto-convert your historical data but updates future UI interactions where applied.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="bg-app-card rounded-2xl border border-app-border overflow-hidden">
@@ -159,7 +224,7 @@ export default function Settings({
             />
             <button
               onClick={() => aidInputRef.current?.click()}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-app-bg border text-app-text hover:text-white border-app-border hover:bg-emerald-500 hover:border-emerald-500 rounded-xl transition-all font-bold group"
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-app-bg border text-app-text hover:text-white border-app-border hover:bg-emerald-500 hover:border-emerald-500 rounded-xl transition-all font-bold group shadow-sm"
             >
               <Upload size={18} className="text-app-muted group-hover:text-white" />
               Import Identity Link (.aid)
@@ -174,23 +239,23 @@ export default function Settings({
             />
             <button
               onClick={() => fgsInputRef.current?.click()}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-app-bg border text-app-text hover:text-white border-app-border hover:bg-blue-500 hover:border-blue-500 rounded-xl transition-all font-bold group"
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-app-bg border text-app-text hover:text-white border-app-border hover:bg-blue-500 hover:border-blue-500 rounded-xl transition-all font-bold group shadow-sm"
             >
               <RefreshCw size={18} className="text-app-muted group-hover:text-white" />
               Refresh Store Data (.fgs)
             </button>
           </div>
-          
-          <div className="pt-6 border-t border-app-border flex justify-between items-center">
-            <span className="text-[10px] font-black text-app-muted uppercase tracking-[0.2em]">Fragrance Planner For Agent v1.2</span>
-            <button
-              onClick={handleSave}
-              className="flex items-center gap-2 px-6 py-2 bg-app-accent text-white rounded-xl hover:bg-app-accent-hover transition-all font-bold shadow-sm"
-            >
-              {isSaved ? <span className="flex items-center gap-2"><RefreshCw size={18} className="animate-spin" /> Saved</span> : <span className="flex items-center gap-2"><Save size={18} /> Save Settings</span>}
-            </button>
-          </div>
         </div>
+      </div>
+
+      <div className="flex justify-between items-center pt-6">
+        <span className="text-[10px] font-black text-app-muted uppercase tracking-[0.2em]">Fragrance Planner For Agent v1.2.1</span>
+        <button
+          onClick={handleSave}
+          className="flex items-center gap-2 px-8 py-3 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all font-bold shadow-lg shadow-emerald-500/20"
+        >
+          {isSaved ? <span className="flex items-center gap-2"><CheckCircle2 size={18} /> Saved successfully</span> : <span className="flex items-center gap-2"><Save size={18} /> Save Settings</span>}
+        </button>
       </div>
     </div>
   );
